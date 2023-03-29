@@ -1,20 +1,29 @@
 import React from 'react'
-import sumitImg from "../../assets/images/avatars/sumit.png"
-import sadhImg from "../../assets/images/avatars/sadh.png"
-import akashImg from "../../assets/images/avatars/akash.png"
-import salahuddinImg from "../../assets/images/avatars/salahuddin.png"
-import riyadhImg from "../../assets/images/avatars/riyadh.png"
-import ferdousImg from "../../assets/images/avatars/ferdous.png"
-import almasImg from "../../assets/images/avatars/almas.png"
+import { useGetTasksQuery } from '../../features/tasks/tasksApi';
 import TaskITem from './TaskITem'
 
 
 const TaskLists = () => {
-  return (
-    <div className="lws-task-list">
-        <TaskITem/>
-    </div>
-  )
+
+    const{data : tasks, isLoading, isError, error} = useGetTasksQuery()
+
+    let content = null;
+
+    if(isLoading) content = <div>Loading...</div>
+
+    if(!isLoading && isError) content = <div>{error}</div>
+
+    if(!isLoading && !isError && tasks.length === 0) content = <div>No projects found</div>
+
+    if(!isLoading && !isError && tasks.length > 0){
+        content = tasks.map((task) => <TaskITem key={task.id} task={task}/>)
+    }
+
+    return (
+      <div className="lws-task-list">
+          {content}
+      </div>
+    )
 }
 
 export default TaskLists

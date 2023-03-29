@@ -1,11 +1,11 @@
 import React from 'react'
 import Lauout from '../components/layout/Layout'
-import AddNewJob from '../components/add/AddNewJob'
+import AddNewTask from '../components/add/AddNewTask'
 
 const Add = () => {
   return (
     <Lauout>
-        <AddNewJob/>
+        <AddNewTask/>
     </Lauout>
   )
 }
