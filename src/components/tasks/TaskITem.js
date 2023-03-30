@@ -1,13 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useChangeStatusMutation, useDeleteTaskMutation } from '../../features/tasks/tasksApi';
 
 
 const TaskITem = ({task}) => {
 
     const navigate = useNavigate();
+    const[changeStatus,{data,isError,error}] = useChangeStatusMutation();
+    const[deleteTask] = useDeleteTaskMutation();
+    const[status,setStatus] = useState(task?.status)
 
     const handleEditNavigate = () => {
         navigate('/edit-task/1')
+    }
+
+
+    const handleChangeStatus = (e) => {
+        setStatus(e.target.value)
+        changeStatus({
+            data: {
+                taskName : task?.taskName,
+                teamMember: task?.teamMember,
+                project: task?.project,
+                deadline : task?.deadline,
+                status: e.target.value
+            },
+            id: task?.id
+        })
+    }
+
+    const handleTaskDelete = () => {
+        deleteTask(task?.id)
     }
 
     return (
@@ -29,13 +52,13 @@ const TaskITem = ({task}) => {
                 </div>
                 {
                     task.status === 'completed' && 
-                    <button className="lws-delete">
+                    <button className="lws-delete" onClick={handleTaskDelete}>
                         <svg
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 text-gray-600 hover:text-red-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="w-6 h-6 text-gray-600 hover:text-red-600"
                         >
                         <path
                             strokeLinecap="round"
@@ -55,8 +78,8 @@ const TaskITem = ({task}) => {
                         </svg>
                     </button>
                 }
-                <select className="lws-status" value={task?.status}>
-                    <option value="pending" >Pending</option>
+                <select className="lws-status" value={status} onChange={handleChangeStatus}>
+                    <option value="pending">Pending</option>
                     <option value="inProgress" >In Progress</option>
                     <option value="completed" >Completed</option>
                 </select>

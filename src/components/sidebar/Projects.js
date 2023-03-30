@@ -7,7 +7,10 @@ const Projects = () => {
     const[projectChecked,setProjectChecked] = useState(true) 
 
     const handleChange = (id) => {
-        setProjectChecked(prevChecked => !prevChecked)
+        let checkedTask = projects.find(project => project.id == id);
+        if (checkedTask) {
+            setProjectChecked(prevChecked => !prevChecked)
+        }
     }
 
     let content = null;
@@ -30,9 +33,7 @@ const Projects = () => {
     return (
         <div>
             <h3 className="text-xl font-bold">Projects</h3>
-            <div className="mt-3 space-y-4">
-                {content}
-            </div>
+            <div className="mt-3 space-y-4">{content}</div>
         </div>
     )
 }
