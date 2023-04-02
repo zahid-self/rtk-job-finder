@@ -9,7 +9,7 @@ const TeamMembers = () => {
 
     if(isLoading) content = <div>Loading...</div>
 
-    if(!isLoading && isError) content = <div>{error}</div>
+    if(!isLoading && isError) content = <div>{error.message}</div>
 
     if(!isLoading && !isError && teamMembers.length === 0) content = <div>No projects found</div>
 

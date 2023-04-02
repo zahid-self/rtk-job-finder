@@ -112,7 +112,24 @@
         "colorClass": "color-scoreboard"
       },
       "deadline": "2023-03-11",
-      "id": 4
+      "id": 4,
+      "status": "inProgress"
+    },
+    {
+      "taskName": "Invalidate edit cache",
+      "teamMember": {
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
+      },
+      "project": {
+        "id": 3,
+        "projectName": "Product Cart",
+        "colorClass": "color-productCart"
+      },
+      "deadline": "2023-04-05",
+      "status": "inProgress",
+      "id": 5
     }
   ]
 }

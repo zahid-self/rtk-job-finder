@@ -1,19 +1,13 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useChangeStatusMutation, useDeleteTaskMutation } from '../../features/tasks/tasksApi';
 
 
 const TaskITem = ({task}) => {
 
-    const navigate = useNavigate();
-    const[changeStatus,{data,isError,error}] = useChangeStatusMutation();
+    const[changeStatus] = useChangeStatusMutation();
     const[deleteTask] = useDeleteTaskMutation();
     const[status,setStatus] = useState(task?.status)
-
-    const handleEditNavigate = () => {
-        navigate('/edit-task/1')
-    }
-
 
     const handleChangeStatus = (e) => {
         setStatus(e.target.value)
@@ -28,6 +22,8 @@ const TaskITem = ({task}) => {
             id: task?.id
         })
     }
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let date = new Date(task?.deadline);
 
     const handleTaskDelete = () => {
         deleteTask(task?.id)
@@ -36,8 +32,8 @@ const TaskITem = ({task}) => {
     return (
         <div className="lws-task">
             <div className="flex items-center gap-2 text-slate">
-                <h2 className="lws-date">26</h2>
-                <h4 className="lws-month">March</h4>
+                <h2 className="lws-date">{date.getDate()}</h2>
+                <h4 className="lws-month">{months[date.getMonth()]}</h4>
             </div>
 
             <div className="lws-taskContainer">
@@ -70,13 +66,13 @@ const TaskITem = ({task}) => {
                 }
                 {
                     task?.status !== 'completed' &&
-                    <button className="lws-edit" onClick={handleEditNavigate}>
+                    <Link to={`/edit-task/${task.id}`} className="lws-edit">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                             stroke="currentColor" className="w-6 h-6 text-gray-600 hover:text-indigo-600">
                             <path strokeLinecap="round" strokeLinejoin="round"
                             d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
-                    </button>
+                    </Link>
                 }
                 <select className="lws-status" value={status} onChange={handleChangeStatus}>
                     <option value="pending">Pending</option>

@@ -1,63 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { useGetProjectsQuery } from '../../features/projects/projectApi';
+import { useGetTaskQuery } from '../../features/tasks/tasksApi';
+import { useGetTeamQuery } from '../../features/teams/teamApi';
+import EditForm from './EditForm';
 
 const EditJob = () => {
-  return (
-    <div className="container relative">
-      <main className="relative z-20 max-w-3xl mx-auto rounded-lg xl:max-w-none">
-        <h1 className="mt-4 mb-8 text-3xl font-bold text-center text-gray-800">Edit Task</h1>
 
-        <div className="justify-center mb-10 space-y-2 md:flex md:space-y-0">
-          <form className="space-y-6">
-            <div className="fieldContainer">
-              <label for="lws-taskName">Task Name</label>
-              <input
-                type="text"
-                name="taskName"
-                id="lws-taskName"
-                required
-                placeholder="Implement RTK Query"
-              />
-            </div>
+    const{taskId} = useParams();
+    const{data : task, isError,isLoading,error} = useGetTaskQuery(taskId);
+    
+    let content = null;
 
-            <div className="fieldContainer">
-              <label>Assign To</label>
-              <select name="teamMember" id="lws-teamMember" required>
-                <option value="" hidden selected>Select Job</option>
-                <option>Sumit Saha</option>
-                <option>Sadh Hasan</option>
-                <option>Akash Ahmed</option>
-                <option>Md Salahuddin</option>
-                <option>Riyadh Hassan</option>
-                <option>Ferdous Hassan</option>
-                <option>Arif Almas</option>
-              </select>
-            </div>
-            <div className="fieldContainer">
-              <label for="lws-projectName">Project Name</label>
-              <select id="lws-projectName" name="projectName" required>
-                <option value="" hidden selected>Select Project</option>
-                <option>Scoreboard</option>
-                <option>Flight Booking</option>
-                <option>Product Cart</option>
-                <option>Book Store</option>
-                <option>Blog Application</option>
-                <option>Job Finder</option>
-              </select>
-            </div>
+    if(isLoading) content = <div>Loading...</div>
 
-            <div className="fieldContainer">
-              <label for="lws-deadline">Deadline</label>
-              <input type="date" name="deadline" id="lws-deadline" required />
-            </div>
+    if(!isLoading && isError) content = <div>{error?.message}</div>
 
-            <div className="text-right">
-              <button type="submit" className="lws-submit">Save</button>
-            </div>
-          </form>
-        </div>
-      </main>
-    </div>
-  )
+    if(!isLoading && !isError && !task.id) content = <div>No task found</div>
+
+    if(!isLoading && !isError && task.id){
+        content = <EditForm task={task}/>
+    }
+
+    return (
+      <div className="container relative">
+        <main className="relative z-20 max-w-3xl mx-auto rounded-lg xl:max-w-none">
+          <h1 className="mt-4 mb-8 text-3xl font-bold text-center text-gray-800">Edit Task</h1>
+          {content}
+        </main>
+      </div>
+    )
 }
 
 export default EditJob

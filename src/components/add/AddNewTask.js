@@ -14,7 +14,7 @@ const AddNewTask = () => {
 
     const{data : projects} = useGetProjectsQuery();
     const{data : teamMembers} = useGetTeamQuery();
-    const[addProject,isError,error] = useAddTaskMutation()
+    const[addProject] = useAddTaskMutation()
 
     const handleSubmit = (e) => {
       e.preventDefault();

@@ -5,6 +5,9 @@ export const tasksApi = apiSlice.injectEndpoints({
         getTasks : build.query({
             query: () => '/tasks'
         }),
+        getTask : build.query({
+            query: (id) => `/tasks/${id}`
+        }),
         addTask: build.mutation({
             query : (data) => ({
                 url: '/tasks',
@@ -20,6 +23,30 @@ export const tasksApi = apiSlice.injectEndpoints({
                     await queryFulfilled
                 } catch (error) {
                     patchResult.undo()
+                }
+            }
+        }),
+        editTask: build.mutation({
+            query : ({id,data}) => ({
+                url: `/tasks/${id}`,
+                method: 'PATCH',
+                body: data
+            }),
+            async onQueryStarted({id,data},{dispatch,queryFulfilled}){
+
+                const updatePatchResult = dispatch(apiSlice.util.updateQueryData('getTasks',undefined,(draft) => {
+                    const draftTask = draft.find(t => t.id == id);
+                    draftTask.taskName = data?.taskName;
+                    draftTask.teamMember = data?.teamMember;
+                    draftTask.project = data?.project;
+                    draftTask.deadline = data?.deadline;
+                }))
+
+
+                try {
+                    await queryFulfilled
+                } catch (error) {
+                    updatePatchResult.undo()
                 }
             }
         }),
@@ -63,4 +90,4 @@ export const tasksApi = apiSlice.injectEndpoints({
     })
 })
 
-export const {useGetTasksQuery, useAddTaskMutation, useChangeStatusMutation, useDeleteTaskMutation} = tasksApi;
+export const {useGetTasksQuery, useGetTaskQuery , useAddTaskMutation, useEditTaskMutation , useChangeStatusMutation, useDeleteTaskMutation} = tasksApi;
